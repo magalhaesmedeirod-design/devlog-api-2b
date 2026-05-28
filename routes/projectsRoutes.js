@@ -2,6 +2,7 @@ import { Router } from "express";
 import{list, create, getById, update, remove}from
 '../controllers/projectController.js';
 import { validateProject} from "../middlewares/validateProject.js";
+import { authenticate } from "../middlewares/authenticate.js";
 const router = Router();
 
 // GET /api/v1/projects

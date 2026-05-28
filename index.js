@@ -14,7 +14,8 @@ import { login } from './controllers/authController.js';
 import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
-import projectRoutes from './routes/projectsRoutes.js'
+import projectRoutes from './routes/projectsRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 const app = express(); //cria instacia do express
 
 // ── Middlewares globais ──────────────────────────────────────
@@ -24,6 +25,7 @@ app.post ('/auth/login', login);
 
 // ── Rotas ────────────────────────────────────────────────────
 app.use('/api/v1/projects', projectRoutes);
+app.use('/api/v1/auth', authRoutes)
 
 app.get('/health', (req, res) => {
   res.json({
