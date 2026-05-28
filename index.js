@@ -9,7 +9,8 @@
 //criar o arquivo index.js
 //iniciar o servidor express
 //npm run dev  //executa o projeto
-
+import { authenticate } from './middlewares/authenticate.js';
+import { login } from './controllers/authController.js';
 import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
@@ -19,7 +20,7 @@ const app = express(); //cria instacia do express
 // ── Middlewares globais ──────────────────────────────────────
 app.use(morgan('dev'));
 app.use(express.json()); //lida com o formato json
-
+app.post ('/auth/login', login);
 
 // ── Rotas ────────────────────────────────────────────────────
 app.use('/api/v1/projects', projectRoutes);
@@ -40,6 +41,17 @@ app.use((req, res, next) => {
     method: req.method
   });
 });
+
+// Públicas — sem autenticação
+app.get('/api/v1/projects', projectController.list);
+app.get('/api/v1/projects/:id', projectController.getById);
+
+
+// Privadas — exigem token
+app.post('/api/v1/projects', authenticate, projectController.create);
+app.patch('/api/v1/projects/:id', authenticate, projectController.update);
+app.delete('/api/v1/projects/:id', authenticate, projectController.remove);
+
 
 // ── Error handler (4 params — SEMPRE ÚLTIMO) ─────────────────
 app.use((err, req, res, next) => {
